@@ -3,7 +3,8 @@
 							{
 								"matches": ["http://*/*", "https://*/*"],
 								"js": ["includes/advancedKeyboardShortcutsFix.js"],
-								"run_at": "document_end"
+								"run_at": "document_end",
+								"all_frames": true
 							}
 						],
 	"description": "Fixes bugs that the 'Advanced keyboard shortcuts' feature has in Opera",
