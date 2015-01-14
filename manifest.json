@@ -7,11 +7,12 @@
 								"all_frames": true
 							}
 						],
+	"options_page": "options/index.html",
 	"description": "Fixes bugs that the 'Advanced keyboard shortcuts' feature has in Opera",
 	"icons": {"64": "icons/Icon.png"},
 	"version": "1.0.0",
 	"manifest_version": 2,
-	"permissions": ["http://*/*", "https://*/*"],
+	"permissions": ["http://*/*", "https://*/*", "storage"],
 	"developer": {"name": "m910q"},
 	"name": "Advanced keyboard shortcuts fix"
 }

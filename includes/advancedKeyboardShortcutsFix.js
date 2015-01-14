@@ -1,20 +1,26 @@
 'use strict';
 (function() {
 	var runningOwnEvent = false;
-	var affectedKeys = new Set([
-		49, // 1
-		50, // 2
-		54, // 6
-		55, // 7
-		56, // 8
-		57, // 9
-		58, // 0
-		43, // +
-		45, // -
-		47  // /
-	]);
+	var affectedKeys = new Map();
 	var invalidInputTypes = new Set(['radio', 'checkbox', 'button', 'color', 'range']);
 	
+	var defaultStorageObject = {
+		keyCodes: [
+				[48, 48], // 0
+				[49, 49], // 1
+				[50, 50], // 2
+				[54, 54], // 6
+				[55, 55], // 7
+				[56, 56], // 8
+				[57, 57]  // 9
+			]
+	};
+	chrome.storage.local.get({ keyCodes: defaultStorageObject }, function(storage) {
+		affectedKeys = new Map(storage.keyCodes);
+	});
+	chrome.storage.onChanged.addListener(function(storageChange) {
+		affectedKeys = new Map(storageChange.keyCodes.newValue);
+	});
 
 	// Add event on all input and textareas on the site
 	addEventToElements(document.body);
@@ -119,10 +125,10 @@
 
 	// Event override used for all elements
 	function keyDownOverride(e) {
-		// Stop this event override if it's not an bug affected key or if modifier keys are pressed.
-		if (!affectedKeys.has(e.which) || runningOwnEvent || e.altKey === true || e.ctrlKey === true || e.shiftKey === true)
+		// Stop this event override if it's not a bug affected key or if modifier keys are pressed.
+		if (!affectedKeys.has(e.keyCode) || runningOwnEvent || e.altKey === true || e.ctrlKey === true || e.shiftKey === true)
 			return;
-			
+		
 		var ele = e.target;
 
 		// Stop everything about this event
@@ -145,20 +151,24 @@
 			runningOwnEvent = false;
 		}
 		
-		// Manually insert the pressed character
+		var character = String.fromCharCode(affectedKeys.get(e.keyCode));
+		// Manually insert the pressed character in editableContent element
 		if (ele.contentEditable == 'true') {
-			replaceWindowSelectionWithHtml(String.fromCharCode(e.which));
+			replaceWindowSelectionWithHtml(character);
 			return;
 		}
 		
 		// Manually insert the pressed character in input or textarea element
+		if (ele.readOnly === true || ele.disabled === true)
+			return;
+			
 		if (ele.selectionStart === ele.selectionEnd && ele.selectionEnd === ele.value.length) {
-			ele.value += String.fromCharCode(e.which);
+			ele.value += character;
 		}else{
 			var endSelectionIndex = ele.selectionStart + 1;
 			var beforeSelection = ele.value.substr(0, ele.selectionStart);
 			var afterSelection = ele.value.substr(ele.selectionEnd, ele.value.length);
-			ele.value = beforeSelection + String.fromCharCode(e.which) + afterSelection;
+			ele.value = beforeSelection + character + afterSelection;
 			ele.setSelectionRange(endSelectionIndex, endSelectionIndex);
 		}
 

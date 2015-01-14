@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Advanced keyboard shortcuts fix - Options</title>
+		<style>
+			body {
+				background-color: #fafafa;
+				text-align: center;
+			}
+			ul {
+				list-style-type: none;
+			}
+			table {
+				border: 1px solid #000;
+				border-spacing: 0;
+			}
+			th {
+				padding: 5px;
+				background-color: #000;
+				color: #fff;
+			}
+			td {
+				padding: 3px;
+			}
+			tr:nth-child(even) {background: #eee}
+			table {
+				margin-left: auto;
+				margin-right: auto;
+			}
+			button {
+				color: #fff;
+				padding: 1px 5px;
+				border-radius: 5px;
+				background-color: #d95050;
+				border: 1px solid #d44030;
+			}
+		</style>
+	</head>	
+	<body>
+		<h1>Advanced keyboard shortcuts fix</h1>
+		<strong>Add keys:</strong> <input id="addNewCharCodeInput" placeholder="Press keys in this field" /><br />
+		I recommend all instances of the following keys on your keyboard: 0, 1, 2, 6, 7, 8, 9, -, + and /<br /><br />
+		<table id="keyCodeTable">
+			<tr>
+				<th></th>
+				<th>Key code</th>
+				<th>Character</th>
+			</tr>
+		</table>
+		
+		<script src="options.js"></script>
+	</body>
+</html>
